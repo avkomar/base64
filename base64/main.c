@@ -125,17 +125,17 @@ int decode(char* inputFileName, char* outputFileName) {
 	int eight[3]; // 101010 11 - 0011 1001 - 11 000111
 	int eofFlag = 0;
 
-	do {
+	while (1) {
 		for (int i = 0; i < 4; i++) {
 			char chr = fgetc(inputFile);
-			if (chr == FAKE_SYMBOL) {
-				// Fake symbols had placed near with the eof, so flag changes with FAKE_SYMBOL too.
-				eofFlag = 1;
-				break;
-			}
 			if (chr == EOF) {
-				six[0] = EOF;
-				break;
+				if (!i) {
+					six[0] = EOF;
+					break;
+				}
+				else {
+					return FAILURE;
+				}
 			}
 			six[i] = getSixByChar(chr);
 		}
@@ -164,8 +164,7 @@ int decode(char* inputFileName, char* outputFileName) {
 				fputc(eight[i], outputFile);
 			}
 		}
-		
-	} while (eofFlag);
+	}
 
 	fclose(inputFile);
 	fclose(outputFile);
