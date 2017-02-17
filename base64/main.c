@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define FAKE -1
+#define FAKE -5
 #define FAKE_SYMBOL '='
 #define FAKE_SYMBOL_CODE -2
 #define UNKNOWN_SYMBOL -1
@@ -129,19 +129,17 @@ int decode(char* inputFileName, char* outputFileName) {
 	char six[4];  // 101010-11   0011-1001   11-000111
 	int eight[3]; // 101010 11 - 0011 1001 - 11 000111
 	int eofFlag = 0;
-	char chars[4];
 
 	while (1) {
 		for (int i = 0; i < 4; i++) {
 			char chr = fgetc(inputFile);
 			if (chr == EOF) {
-				if (!i) {
-					six[0] = EOF;
-					break;
-				}
-				else {
+				if (i != 0) {
+					// Bad encoded text.
 					return FAILURE;
 				}
+				six[0] = EOF;
+				break;
 			}
 			six[i] = getSixByChar(chr);
 		}
@@ -155,10 +153,9 @@ int decode(char* inputFileName, char* outputFileName) {
 		eight[2] = ((six[2] & 3) << 6) | six[3];
 
 		if (six[3] == FAKE_SYMBOL_CODE) {
-			eight[2] = ((six[2] & 3) << 6) | 0;
+			eight[2] = FAKE;
 			if (six[2] == FAKE_SYMBOL_CODE) {
-				eight[2] = FAKE;
-				eight[1] = ((six[1] & 15) << 2) | 0;
+				eight[1] == FAKE;
 				if (six[1] == FAKE_SYMBOL_CODE) {
 					return FAILURE;
 				}
