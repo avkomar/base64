@@ -3,6 +3,7 @@
 
 #define FAKE -1
 #define FAKE_SYMBOL '='
+#define FAKE_SYMBOL_CODE -2
 #define UNKNOWN_SYMBOL -1
 #define SUCCESS 1
 #define FAILURE 0
@@ -49,6 +50,10 @@ int getSixByChar(char chr) {
 		return 63;
 	}
 
+	if (chr == FAKE_SYMBOL) {
+		return FAKE_SYMBOL_CODE;
+	}
+
 	return UNKNOWN_SYMBOL;
 }
 
@@ -82,7 +87,7 @@ int encode(char* inputFileName, char* outputFileName) {
 
 		six[0] = eight[0] >> 2;
 		six[1] = ((eight[0] & 3) << 4) | (eight[1] >> 4);
-		six[2] = ((eight[1] << 4) & 63) | (eight[2] >> 6);
+		six[2] = ((eight[1] & 15) << 2) | (eight[2] >> 6);
 		six[3] = (eight[2] & 63);
 
 		if (eofFlag) {
@@ -94,7 +99,7 @@ int encode(char* inputFileName, char* outputFileName) {
 					six[2] = FAKE;
 					six[1] = ((eight[0] & 3) << 4) | 0;
 					if (eight[0] == EOF) {
-						break;
+						continue;
 					}
 				}
 			}
@@ -124,10 +129,13 @@ int decode(char* inputFileName, char* outputFileName) {
 	char six[4];  // 101010-11   0011-1001   11-000111
 	int eight[3]; // 101010 11 - 0011 1001 - 11 000111
 	int eofFlag = 0;
+	int c = 0;
+	char chars[4];
 
 	while (1) {
 		for (int i = 0; i < 4; i++) {
 			char chr = fgetc(inputFile);
+			c++;
 			if (chr == EOF) {
 				if (!i) {
 					six[0] = EOF;
@@ -148,12 +156,12 @@ int decode(char* inputFileName, char* outputFileName) {
 		eight[1] = ((six[1] & 15) << 2) | (six[2] >> 2);
 		eight[2] = ((six[2] & 3) << 6) | six[3];
 
-		if (six[3] == FAKE_SYMBOL) {
+		if (six[3] == FAKE_SYMBOL_CODE) {
 			eight[2] = ((six[2] & 3) << 6) | 0;
-			if (six[2] == FAKE_SYMBOL) {
+			if (six[2] == FAKE_SYMBOL_CODE) {
 				eight[2] = FAKE;
 				eight[1] = ((six[1] & 15) << 2) | 0;
-				if (six[1] == FAKE_SYMBOL) {
+				if (six[1] == FAKE_SYMBOL_CODE) {
 					return FAILURE;
 				}
 			}
