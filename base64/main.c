@@ -129,13 +129,11 @@ int decode(char* inputFileName, char* outputFileName) {
 	char six[4];  // 101010-11   0011-1001   11-000111
 	int eight[3]; // 101010 11 - 0011 1001 - 11 000111
 	int eofFlag = 0;
-	int c = 0;
 	char chars[4];
 
 	while (1) {
 		for (int i = 0; i < 4; i++) {
 			char chr = fgetc(inputFile);
-			c++;
 			if (chr == EOF) {
 				if (!i) {
 					six[0] = EOF;
@@ -153,7 +151,7 @@ int decode(char* inputFileName, char* outputFileName) {
 		}
 
 		eight[0] = (six[0] << 2) | (six[1] >> 4);
-		eight[1] = ((six[1] & 15) << 2) | (six[2] >> 2);
+		eight[1] = ((six[1] & 15) << 4) | (six[2] >> 2);
 		eight[2] = ((six[2] & 3) << 6) | six[3];
 
 		if (six[3] == FAKE_SYMBOL_CODE) {
