@@ -90,18 +90,18 @@ int encode(char* inputFileName, char* outputFileName) {
 		}
 
 		six[0] = eight[0] >> 2;
-		six[1] = ((eight[0] & 3) << 4) | (eight[1] >> 4);
-		six[2] = ((eight[1] & 15) << 2) | (eight[2] >> 6);
-		six[3] = (eight[2] & 63);
+		six[1] = ((eight[0] & 0b11) << 4) | (eight[1] >> 4);
+		six[2] = ((eight[1] & 0b1111) << 2) | (eight[2] >> 6);
+		six[3] = (eight[2] & 0b111111);
 
 		if (eofFlag) {
 			// Inserting fakes.
 			if (eight[2] == EOF) {
 				six[3] = FAKE;
-				six[2] = ((eight[1] << 4) & 15) | 0;
+				six[2] = ((eight[1] & 0b1111) << 2) | 0;
 				if (eight[1] == EOF) {
 					six[2] = FAKE;
-					six[1] = ((eight[0] & 3) << 4) | 0;
+					six[1] = ((eight[0] & 0b11) << 4) | 0;
 					if (eight[0] == EOF) {
 						continue;
 					}
@@ -150,10 +150,10 @@ int decode(char* inputFileName, char* outputFileName, int ignoreFlag) {
 				break;
 			}
 			six[i] = getSixByChar(chr);
-			if ((six[i]) == UNKNOWN_SYMBOL) {
+			if (six[i] == UNKNOWN_SYMBOL) {
 				if (ignoreFlag) {
 					// Dropping wrong symbol.
-					i--;
+					--i;
 				}
 			}
 		}
@@ -163,8 +163,8 @@ int decode(char* inputFileName, char* outputFileName, int ignoreFlag) {
 		}
 
 		eight[0] = (six[0] << 2) | (six[1] >> 4);
-		eight[1] = ((six[1] & 15) << 4) | (six[2] >> 2);
-		eight[2] = ((six[2] & 3) << 6) | six[3];
+		eight[1] = ((six[1] & 0b1111) << 4) | (six[2] >> 2);
+		eight[2] = ((six[2] & 0b11) << 6) | six[3];
 
 		if (six[3] == FAKE_SYMBOL_CODE) {
 			eight[2] = FAKE;

@@ -24,7 +24,7 @@ void main(int argc, char* argv[]) {
 		}
 		if (argc == 5) {
 			if (!strcmp(argv[2], "-i")) {
-				decode(argv[2], argv[3], 1);
+				decode(argv[3], argv[4], 1);
 				return;
 			}
 		}
