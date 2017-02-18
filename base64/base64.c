@@ -72,7 +72,7 @@ int encode(char* inputFileName, char* outputFileName) {
 	// Groups of bits as dec format.
 	int eight[3];	// 101010 11 - 0011 1001 - 11 000111
 	int six[4];		// 101010-11   0011-1001   11-000111
-					// Reached the end of file, need to put fakes.
+	// Reached the end of file, need to put fakes.
 	int eofFlag = 0;
 
 	do {
@@ -122,7 +122,7 @@ int encode(char* inputFileName, char* outputFileName) {
 	return SUCCESS;
 }
 
-int decode(char* inputFileName, char* outputFileName) {
+int decode(char* inputFileName, char* outputFileName, int ignoreFlag) {
 
 	if ((!inputFileName) || (!outputFileName)) {
 		return FAILURE;
@@ -150,6 +150,12 @@ int decode(char* inputFileName, char* outputFileName) {
 				break;
 			}
 			six[i] = getSixByChar(chr);
+			if ((six[i]) == UNKNOWN_SYMBOL) {
+				if (ignoreFlag) {
+					// Dropping wrong symbol.
+					i--;
+				}
+			}
 		}
 
 		if (six[0] == EOF) {
