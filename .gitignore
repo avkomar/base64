@@ -3,3 +3,5 @@
 [Bb]uild/
 [Dd]ebug/
 *.opendb
+.vs/
+*.db
