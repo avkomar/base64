@@ -6,6 +6,7 @@
 
 void printHelp() {
 	printf("base64.exe -e sourceFileName outputFileName - encoding.\n");
+	printf("base64.exe -e -f{linesize} sourceFileName outputFileName - encoding with fixed line size.\n");
 	printf("base64.exe -d sourceFileName outputFileName - decoding.\n");
 	printf("base64.exe -d -i sourceFileName outputFileName - encoding with ignoring unknown symbols.\n");
 }
@@ -49,8 +50,9 @@ void main(int argc, char* argv[]) {
 				return;
 			}
 			if (argc == 5) {
-				if (checkFormatFlag(argv[4])) {
-					encode(argv[2], argv[3], parseFormatFlag(argv[4]));
+				if (checkFormatFlag(argv[2])) {
+					encode(argv[3], argv[4], parseFormatFlag(argv[2]));
+					return;
 				}
 			}
 		}

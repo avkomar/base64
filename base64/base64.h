@@ -4,8 +4,8 @@
 #define SUCCESS 1
 #define FAILURE 0
 
-#define NORMAL_DECODE_MODE 1
-#define IGNORE_DECODE_MODE 0
+#define IGNORE_DECODE_MODE 1
+#define NORMAL_DECODE_MODE 0
 
 int getSixByChar(char chr);
 
