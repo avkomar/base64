@@ -36,14 +36,15 @@ int encode(char* inputFileName, char* outputFileName) {
 	// Reached the end of file, need to put fakes.
 	int eofFlag = 0;
 
+	int i, j;
 	do {
 
-		for (int i = 0; i < 3; i++) {
+		for (i = 0; i < 3; i++) {
 			eight[i] = fgetc(inputFile);
 			if ((eight[i]) == EOF) {
 				eofFlag = 1;
 				// Cleaning trash bytes.
-				for (int j = 2; j > i; j++) {
+				for (j = 2; j > i; j++) {
 					eight[i] = EOF;
 				}
 				break;
@@ -70,7 +71,7 @@ int encode(char* inputFileName, char* outputFileName) {
 			}
 		}
 
-		for (int i = 0; i < 4; i++) {
+		for (i = 0; i < 4; i++) {
 			char newChar = getCharBySix(six[i]);
 			fprintf(outputFile, "%c", newChar);
 		}
