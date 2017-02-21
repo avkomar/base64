@@ -4,6 +4,11 @@
 #define SUCCESS 1
 #define FAILURE 0
 
+#define NORMAL_DECODE_MODE 1
+#define IGNORE_DECODE_MODE 0
+
+int getSixByChar(char chr);
+
 // Encodes a byte file named inputFileName to a base64-text file named outputFileName.
 // Returns FAILURE on wrong file names or SUCCESS after encoding.
 int encode(char* inputFileName, char* outputFileName);
