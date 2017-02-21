@@ -5,8 +5,6 @@
 #define FAKE_SYMBOL '='
 #define FAKE_SYMBOL_CODE -2
 #define UNKNOWN_SYMBOL -1
-#define SUCCESS 1
-#define FAILURE 0
 
 char getCharBySix(int six) {
 
@@ -154,6 +152,9 @@ int decode(char* inputFileName, char* outputFileName, int ignoreFlag) {
 				if (ignoreFlag) {
 					// Dropping wrong symbol.
 					--i;
+				}
+				else {
+					return FAILURE;
 				}
 			}
 		}
