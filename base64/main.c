@@ -11,11 +11,6 @@ void printHelp() {
 }
 
 void main(int argc, char* argv[]) {
-	/*
-	FILE* file = fopen("fewf.txt", "w");
-	for (int i = 0; i < 256; i++) {
-		fprintf(file, "%d, ", getSixByChar(i));
-	}*/
 	if (argc >= 4) {
 		if (!strcmp(argv[1], "-e")) {
 			if (argc == 4) {
