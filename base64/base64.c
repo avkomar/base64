@@ -24,26 +24,23 @@ int getSixByChar(char chr) {
 }
 
 int encode(char* inputFileName, char* outputFileName, unsigned int lineSize) {
-
-	if ((!inputFileName) || (!outputFileName)) {
-		return FAILURE;
-	}
-
-	FILE* inputFile = fopen(inputFileName, "rb");
-	FILE* outputFile = fopen(outputFileName, "w");
-	if ((!inputFile) || (!outputFile)) {
-		return FAILURE;
-	}
-
 	// Groups of bits as dec format.
 	int eight[3];	// 101010 11 - 0011 1001 - 11 000111
 	int six[4];		// 101010-11   0011-1001   11-000111
 	// Reached the end of file, need to put fakes.
 	int eofFlag = 0;
-
 	int i, j;
 	// Reached lineSize, need to put \n.
 	int breakCouter = 0;
+        char newChar;
+
+	FILE* inputFile = fopen(inputFileName, "rb");
+	FILE* outputFile = fopen(outputFileName, "w");
+
+	if ((!inputFile) || (!outputFile)) {
+		return FAILURE;
+	}
+
 	do {
 
 		for (i = 0; i < 3; i++) {
@@ -79,7 +76,7 @@ int encode(char* inputFileName, char* outputFileName, unsigned int lineSize) {
 		}
 
 		for (i = 0; i < 4; i++) {
-			char newChar = getCharBySix(six[i]);
+			newChar = getCharBySix(six[i]);
 			fprintf(outputFile, "%c", newChar);
 			if (lineSize) {
 				breakCouter++;
@@ -99,23 +96,20 @@ int encode(char* inputFileName, char* outputFileName, unsigned int lineSize) {
 }
 
 int decode(char* inputFileName, char* outputFileName, int ignoreFlag) {
-	 
-	if ((!inputFileName) || (!outputFileName)) {
-		return FAILURE;
-	}
+	char six[4];  // 101010-11   0011-1001   11-000111
+	int eight[3]; // 101010 11 - 0011 1001 - 11 000111
+	int eofFlag = 0;
 
+	int i;
+	 
 	FILE* inputFile = fopen(inputFileName, "r");
 	FILE* outputFile = fopen(outputFileName, "wb");
 	if ((!inputFile) || (!outputFile)) {
 		return FAILURE;
 	}
 
-	char six[4];  // 101010-11   0011-1001   11-000111
-	int eight[3]; // 101010 11 - 0011 1001 - 11 000111
-	int eofFlag = 0;
-
 	while (1) {
-		for (int i = 0; i < 4; i++) {
+		for (i = 0; i < 4; i++) {
 			char chr = fgetc(inputFile);
 			if (chr == EOF) {
 				if (i != 0) {
@@ -155,7 +149,7 @@ int decode(char* inputFileName, char* outputFileName, int ignoreFlag) {
 			}
 		}
 
-		for (int i = 0; i < 3; i++) {
+		for (i = 0; i < 3; i++) {
 			if (eight[i] != FAKE) {
 				fputc(eight[i], outputFile);
 			}

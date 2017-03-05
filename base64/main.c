@@ -12,9 +12,10 @@ void printHelp() {
 }
 
 int checkFormatFlag(char* flag) {
+	int i;
 	if (flag[0] == '-') {
 		if (flag[1] == 'f') {
-			for (int i = 2; i < strlen(flag); i++) {
+			for (i = 2; i < strlen(flag); i++) {
 				if ((flag[i] < '0') || (flag[i] > '9')) {
 					return 0;
 				}
